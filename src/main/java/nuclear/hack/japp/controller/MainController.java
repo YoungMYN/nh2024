@@ -12,7 +12,7 @@ import java.util.List;
 @RestController
 @RequestMapping("/api")
 public class MainController {
-
+    //ya tvou maminy...
     @GetMapping("/tutorials")
     public ResponseEntity<List<String>> getAllTutorials(@RequestParam(required = false) String title) {
         try {
