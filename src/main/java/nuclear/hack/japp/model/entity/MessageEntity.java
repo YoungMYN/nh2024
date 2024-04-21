@@ -1,18 +1,17 @@
 package nuclear.hack.japp.model.entity;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
 import lombok.Data;
 
 import java.sql.Timestamp;
 
 @Entity
 @Data
-@Table(schema = "public", name = "_message")
+@Table(schema = "public",catalog = "nh24", name = "_message")
 public class MessageEntity {
-    @Column(name = "message_id")
-    Long id;
+    @Id
+    @Column(name = "message_id", nullable = false)
+    private Long id;
     @Column(name = "tx")
-    String json;
+    private String json;
 }

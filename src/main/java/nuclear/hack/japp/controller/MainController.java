@@ -37,6 +37,7 @@ public class MainController {
         try {
             System.out.println("Получили строку "+ rq);
             MessageEntity message = new MessageEntity();
+            message.setId((long) (0 + Math.random() * (100_000 + 1)));
             message.setJson(rq.toString());
             messageRepo.saveAndFlush(message);
 
@@ -45,6 +46,7 @@ public class MainController {
             rs.setComment("Транзакция прошла успешно");
             return new ResponseEntity<>(rs, HttpStatus.CREATED);
         } catch (Exception e) {
+            e.printStackTrace();
             return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
