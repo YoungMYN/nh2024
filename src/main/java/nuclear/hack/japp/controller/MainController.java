@@ -1,6 +1,11 @@
 package nuclear.hack.japp.controller;
 
 
+import nuclear.hack.japp.model.TRequest;
+import nuclear.hack.japp.model.TResponse;
+import nuclear.hack.japp.model.entity.MessageEntity;
+import nuclear.hack.japp.model.repo.MessageRepo;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -12,8 +17,9 @@ import java.util.List;
 @RestController
 @RequestMapping("/api")
 public class MainController {
-    //ya tvou maminy...
-    @GetMapping("/tutorials")
+    @Autowired
+    MessageRepo messageRepo;
+    @GetMapping("/info")
     public ResponseEntity<List<String>> getAllTutorials(@RequestParam(required = false) String title) {
         try {
             List<String> tutorials = new ArrayList<>();
@@ -26,11 +32,18 @@ public class MainController {
             return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
-    @PostMapping("/tutorials")
-    public ResponseEntity<String> createTutorial(@RequestBody String tutorial) {
+    @PostMapping("/transaction")
+    public ResponseEntity<TResponse> createTutorial(@RequestBody TRequest rq) {
         try {
-            System.out.println("Сохранили строку "+ tutorial);
-            return new ResponseEntity<>("kaef", HttpStatus.CREATED);
+            System.out.println("Получили строку "+ rq);
+            MessageEntity message = new MessageEntity();
+            message.setJson(rq.toString());
+            messageRepo.saveAndFlush(message);
+
+            TResponse rs = new TResponse();
+            rs.setStatus("SUCCESS");
+            rs.setComment("Транзакция прошла успешно");
+            return new ResponseEntity<>(rs, HttpStatus.CREATED);
         } catch (Exception e) {
             return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
         }
